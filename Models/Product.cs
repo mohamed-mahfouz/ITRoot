@@ -9,6 +9,7 @@ namespace ITRoot.Models
         public string Name { get; set; }
          public float Price { get; set; }
         public ICollection<Invoice> Invoices { get; set; }
+        public List<InvoiceProduct> InvoiceProducts { get; set; }
         
     }
 }

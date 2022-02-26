@@ -7,6 +7,7 @@ namespace ITRoot.Models
     {
         public int Id { get; set; }
         public ICollection<Product> Products { get; set; }
+        public List<InvoiceProduct> InvoiceProducts { get; set; }
         
     }
 }

@@ -3,14 +3,16 @@ using ITRoot.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITRoot.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220225180422_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,21 +30,6 @@ namespace ITRoot.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("ITRoot.Models.InvoiceProduct", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "InvoiceId");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.ToTable("InvoiceProduct");
                 });
 
             modelBuilder.Entity("ITRoot.Models.Product", b =>
@@ -173,33 +160,34 @@ namespace ITRoot.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ITRoot.Models.InvoiceProduct", b =>
+            modelBuilder.Entity("InvoiceProduct", b =>
                 {
-                    b.HasOne("ITRoot.Models.Invoice", "Invoice")
-                        .WithMany("InvoiceProducts")
-                        .HasForeignKey("InvoiceId")
+                    b.Property<int>("InvoicesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvoicesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("InvoiceProduct");
+                });
+
+            modelBuilder.Entity("InvoiceProduct", b =>
+                {
+                    b.HasOne("ITRoot.Models.Invoice", null)
+                        .WithMany()
+                        .HasForeignKey("InvoicesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITRoot.Models.Product", "product")
-                        .WithMany("InvoiceProducts")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("ITRoot.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Invoice");
-
-                    b.Navigation("product");
-                });
-
-            modelBuilder.Entity("ITRoot.Models.Invoice", b =>
-                {
-                    b.Navigation("InvoiceProducts");
-                });
-
-            modelBuilder.Entity("ITRoot.Models.Product", b =>
-                {
-                    b.Navigation("InvoiceProducts");
                 });
 #pragma warning restore 612, 618
         }
