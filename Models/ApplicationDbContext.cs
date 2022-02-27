@@ -1,9 +1,10 @@
 using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITRoot.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -17,18 +18,18 @@ namespace ITRoot.Models
         {
 
             modelBuilder.Entity<Product>().HasMany(p =>p.Invoices)
-                                          .WithMany( i => i.Products)
-                                          .UsingEntity<InvoiceProduct>(
-                                                 j=>
-                                                   j.HasOne(ip => ip.Invoice)
-                                                    .WithMany(i =>i.InvoiceProducts)
-                                                    .HasForeignKey(ip => ip.InvoiceId),
-                                                 j=>
-                                                    j.HasOne(ip => ip.product)
-                                                    .WithMany(p=>p.InvoiceProducts)
-                                                    .HasForeignKey(ip => ip.ProductId),
-                                                    j=>j.HasKey( k => new {k.ProductId , k.InvoiceId})
-                                          );
+                    .WithMany( i => i.Products)
+                    .UsingEntity<InvoiceProduct>(
+                        j=>
+                        j.HasOne(ip => ip.Invoice)
+                            .WithMany(i =>i.InvoiceProducts)
+                            .HasForeignKey(ip => ip.InvoiceId),
+                        j=>
+                            j.HasOne(ip => ip.product)
+                            .WithMany(p=>p.InvoiceProducts)
+                            .HasForeignKey(ip => ip.ProductId),
+                            j=>j.HasKey( k => new {k.ProductId , k.InvoiceId})
+                        );
 
 
             modelBuilder.Entity<Product>().HasData(

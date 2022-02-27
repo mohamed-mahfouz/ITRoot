@@ -6,6 +6,7 @@ using ITRoot.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,13 @@ namespace ITRoot
 
              services.AddControllersWithViews();
              
+             services.AddIdentity<ApplicationUser , IdentityRole>()    
+                        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+             services.Configure<IdentityOptions>(opt => {
+                 opt.Password.RequireUppercase = false;
+                 opt.Password.RequiredLength = 8;
+             });
              services.AddScoped<IInvoiceRepository,InvoiceRepository>();
         }
 
@@ -51,6 +59,7 @@ namespace ITRoot
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

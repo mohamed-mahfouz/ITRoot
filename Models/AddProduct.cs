@@ -6,9 +6,7 @@ using ITRoot.Models;
 namespace ITRoot.Models
 {
     public class AddProduct
-    {
-            
-            
+    {      
         public string Product { get; set; }   
          public int? InvoiceId { get; set; }
     }
